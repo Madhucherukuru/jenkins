@@ -1,0 +1,6 @@
+image_name=$(sudo docker inspect "anschutz-front" | grep "Image" |awk 'NR==2' | sed 's/\"//g' | sed 's/\,//g' | awk '{print $2}')
+sudo docker build --build-arg  FRONTEND_ENV=anschutz-test --rm -t anschutz_front-image:$buildno .
+sudo docker rm -f anschutz-front || true
+sudo docker rmi  $image_name || true
+
+sudo docker run -d --rm -p 4000:80 --name "anschutz-front" anschutz_front-image:$buildno
